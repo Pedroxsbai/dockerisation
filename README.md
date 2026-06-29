@@ -112,7 +112,7 @@ Lance Postgres + pgvector + backend + service IA + frontend, tous interconnecté
 ##  Sécurité — checklist avant de passer en prod
 
 - [ ] Aucun secret en dur dans le Dockerfile (utiliser Secrets Manager + variables d'env injectées par ECS)
-- [ ] Utilisateur non-root activé ✅ (déjà fait)
+- [ ] Utilisateur non-root activé 
 - [ ] Image scannée par Trivy ou ECR scan (à activer côté ECR)
 - [ ] Image basée sur une version **figée** (`python:3.12-slim`, pas `python:latest`)
 - [ ] `.dockerignore` à jour (pas de `.env` ni de `.git` dans l'image)
