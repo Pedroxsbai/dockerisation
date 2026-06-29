@@ -1,0 +1,47 @@
+# Composer
+vendor/
+
+# Node
+node_modules/
+npm-debug.log
+
+# Laravel
+.env
+.env.*
+!.env.example
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*.php
+public/storage
+
+# Tests
+tests/
+phpunit.xml
+.phpunit.result.cache
+
+# IDE
+.idea/
+.vscode/
+.fleet/
+
+# Git
+.git/
+.gitignore
+.github/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs
+README.md
+*.md
+
+# Build artifacts du front (refait dans le stage Node)
+public/build/
+public/hot
+public/js/
+public/css/
+public/mix-manifest.json

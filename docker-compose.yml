@@ -1,0 +1,70 @@
+# Docker Compose — Projet 1 (dev local)
+# Lance toute la stack : backend Laravel + service IA + frontend + Postgres + pgvector
+# Usage : docker compose up --build
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: projet1-postgres
+    environment:
+      POSTGRES_USER: projet1
+      POSTGRES_PASSWORD: dev_password_change_me
+      POSTGRES_DB: projet1
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U projet1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./projet1-backend
+      dockerfile: Dockerfile
+    container_name: projet1-backend
+    ports:
+      - "8080:80"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: base64:CHANGE_ME_GENERATE_WITH_php_artisan_keygenerate
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: projet1
+      DB_USERNAME: projet1
+      DB_PASSWORD: dev_password_change_me
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ai-service:
+    build:
+      context: ./projet1-ai-service
+      dockerfile: Dockerfile
+    container_name: projet1-ai-service
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://projet1:dev_password_change_me@postgres:5432/projet1
+      ENV: dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./projet1-frontend
+      dockerfile: Dockerfile
+    container_name: projet1-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+      - ai-service
+
+volumes:
+  postgres_data:
